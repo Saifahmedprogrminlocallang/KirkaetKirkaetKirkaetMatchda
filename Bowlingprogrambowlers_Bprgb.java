@@ -32,7 +32,7 @@ public class Bowlingprogrambowlers_Bprgb {
 			int i;
 			i=0;
 			for(i=1;i<=4;i++) {
-				oversbowledbyeverybowlerinthematch[i]=Bowlingprogrambowlers_Bprgb.readcounterfromfile("oversbowled"+i, Matchstatistics);
+				Currentmatchbowlerordersequence[i]=Bowlingprogrambowlers_Bprgb.readcounterfromfile("oversbowled"+i, Matchstatistics);
 			}
 		}
 
@@ -89,7 +89,14 @@ public class Bowlingprogrambowlers_Bprgb {
 		return name;	
 	}
 	
-	public int[] Matchplayball(int overorderforeverybowler,int cntr) {
+	public void printScore(int option, int runsscored, int wickets) {
+		
+		System.out.println("bowler "+ option +"bowling. A ball is bowled");
+		System.out.println("The Score is - "+runsscored+" wickets - "+wickets);
+		
+	}
+	
+	public int[] Matchplayball(int[] bowleroutcome, int overorderforeverybowler, int cntr, int bowler) {
 
 		String Commentary="";
 		int runsscored=0;
@@ -103,35 +110,58 @@ public class Bowlingprogrambowlers_Bprgb {
 		int i=0;
 		int j=0;
 		int overnumber[]=new int[4];
-		int scoreandwicketsforover[]=new int[6];
-		for(i=0;i<4;i++) {
+		int scoreandwicketsforover[]=new int[12];
+		int option;
+		option=bowler;
+		
+		//for(i=0;i<4;i++) {
 			overnumber[i]=Match.Currentmatchbowlerordersequence[i];
-			scoreandwicketsforover= readbowlersequence(overorderforeverybowler);
+
+			//scoreandwicketsforover= readbowlersequence(overorderforeverybowler, bowleroutcome); //Async -to read from generated file
+			scoreandwicketsforover= bowleroutcome;//Sync
 			
-			//PlayBallPlayMatchMatchStatistics.statisticsbowlerover=scoreandwicketsforover;//write statistics to file
-			//writematchstatistics(scoreandwicketsforover, Match.matchesplayed);
+			int jcntr;
+			jcntr=0;
+			j=Match.matchesplayed*6;
+			int jcntrlength;
+			jcntrlength=0;
+			jcntrlength=j+6;
 			
-			
-			for (j=0;j<6;j++) {
-				if (scoreandwicketsforover[j]==0) 
+			for (jcntr=j;jcntr<jcntrlength;jcntr++) {
+				if (scoreandwicketsforover[jcntr]==0) {
 					runsscored=runsscored+0;
-				else if(scoreandwicketsforover[j]==1) 
+				printScore(option,runsscored,wickets);
+				}
+				else if(scoreandwicketsforover[jcntr]==1) { 
 					runsscored=runsscored+1;
-				else if(scoreandwicketsforover[j]==2) 
+				printScore(option,runsscored,wickets);
+				}
+				else if(scoreandwicketsforover[jcntr]==2) {
 					runsscored=runsscored+2;
-				else if(scoreandwicketsforover[j]==3) 
+				printScore(option,runsscored,wickets);
+				}
+				else if(scoreandwicketsforover[jcntr]==3) {
 					runsscored=runsscored+3;
-				else if(scoreandwicketsforover[j]==4) 
+				printScore(option,runsscored,wickets);
+				}
+				else if(scoreandwicketsforover[jcntr]==4) {
 					runsscored=runsscored+4;
-				else if(scoreandwicketsforover[j]==5) 
+				printScore(option,runsscored,wickets);
+				}
+				else if(scoreandwicketsforover[jcntr]==5) {
 					runsscored=runsscored+5;
-				else if(scoreandwicketsforover[j]==6) 
+				printScore(option,runsscored,wickets);
+				}
+				else if(scoreandwicketsforover[jcntr]==6) {
 					runsscored=runsscored+6;
-				else if(scoreandwicketsforover[j]==-1) {
+				printScore(option,runsscored,wickets);
+				}
+				else if(scoreandwicketsforover[jcntr]==-1) {
 					wickets=wickets+1;
 				wicketstakenflag=1;
+				printScore(option,runsscored,wickets);
 				}
-			}		
+			}	//for 1 over	
 			
 			if ((wicketstakenflag==1) && wickets<4) {
 				equationmatchscorerunsscoredwicketstakenwicketsremaining[1]=wickets+equationmatchscorerunsscoredwicketstakenwicketsremaining[1];
@@ -139,15 +169,39 @@ public class Bowlingprogrambowlers_Bprgb {
 				equationmatchscorerunsscoredwicketstakenwicketsremaining[0]=runsscored+equationmatchscorerunsscoredwicketstakenwicketsremaining[0];
 			}
 			
-		}
-		
 		//return false or true to indicate -- match should be continued or stopped - win or lose
 		return equationmatchscorerunsscoredwicketstakenwicketsremaining;
 	}
 	
+	public int CheckEQCcheckequation(int[] equationsrunsscoredwicketsremaining, int icntr){
+		
+		int result;
+		result=0;
+		
+		if ((equationsrunsscoredwicketsremaining[0]>=37) && (equationsrunsscoredwicketsremaining[1]<4) && (icntr<=4)) {
+			System.out.println("Lengaburu wins!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			result=1;	
+		} else if ((equationsrunsscoredwicketsremaining[0]==37) && (equationsrunsscoredwicketsremaining[1]<4) && (icntr<=4)) {
+			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ITS A TIE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			result=0;	
+		} else if ((equationsrunsscoredwicketsremaining[0]>=37) && (equationsrunsscoredwicketsremaining[1]<4) && (icntr==4)) {
+			System.out.println("Lengaburu Wins!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			result=1;	
+		} else if ((equationsrunsscoredwicketsremaining[0]<37) && (equationsrunsscoredwicketsremaining[1]>4) && (icntr==4)) {
+			System.out.println("Enchai Wins!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			result=2;	
+		} else if ((equationsrunsscoredwicketsremaining[0]<37) && (equationsrunsscoredwicketsremaining[1]<=4) && (icntr==4)) {
+			System.out.println("Enchai Wins!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			result=2;	
+		}
+		
+		return result;
+
+	}			
+
 	
 	//public int[] Matchgeneratebbowlersovers(int bowler, int over) {
-	public void Matchgeneratebbowlersovers(int bowler, int over) {
+	public int[] Matchgeneratebbowlersovers(int bowler, int over) {
 		
 		//int commentary = generatecommentary(bowlername, over);
 		int  bowlingprowess[];
@@ -192,19 +246,19 @@ public class Bowlingprogrambowlers_Bprgb {
 		i=1;
 		System.out.println("bowler -"+bowler);
 		
-		if (bowler==1){ //"Kirat Boli")) {
+		if (bowler==0){ //"Kirat Boli")) {
 			for(i=0;i<=8;i++) {
 				bowlerselected[i]=Bowlers.bowler1cntr[i];
 			}
-		} else if (bowler==2){//("N. S Nodhi")) {
+		} else if (bowler==1){//("N. S Nodhi")) {
 			for(i=0;i<=8;i++) {
 				bowlerselected[i]=Bowlers.bowler2cntr[i];
 			}
-		} else if (bowler==3){//("R Rumrah")) {
+		} else if (bowler==2){//("R Rumrah")) {
 			for(i=0;i<=8;i++) {
 				bowlerselected[i]=Bowlers.bowler3cntr[i];
 			}
-		} else if (bowler==4){//("Shashi Henra")) {
+		} else if (bowler==3){//("Shashi Henra")) {
 			for(i=0;i<=8;i++) {
 				bowlerselected[i]=Bowlers.bowler4cntr[i];
 			}
@@ -225,6 +279,7 @@ public class Bowlingprogrambowlers_Bprgb {
 		// bowler 1 sequence
 		//static int cntr1, cntr2,cntr3, cntr4, cntr5, cntr6, cntr7, cntr8;
 		String score;
+		score="";
 		
 		score="<score>"+"<bowler>"+bowler+"</bowler>";
 		
@@ -236,13 +291,14 @@ public class Bowlingprogrambowlers_Bprgb {
 		int matchscore;
 		matchscore=0;
 		int oversbowled;
-		oversbowled=1;
+		oversbowled=0;
+		oversbowled=over;
 		
 		score=score+"<over>";
 		
 		//public static int cntr1=bowler1cntr[1];
 
-		while (bowlercntr<=900) { //900
+		while (bowlercntr<=12) { //900
 			randomgenerated = generator.nextDouble();
 			System.out.println("randomgenerated - "+randomgenerated);
 			randomnumbergen=randomgenerated*100;
@@ -251,10 +307,11 @@ public class Bowlingprogrambowlers_Bprgb {
 			System.out.println("int randomnumber - "+bowlingcntr);
 
 			
-			if ((bowlingcntr>=6) && ((bowlingcntr%6)==0)){
+			if ((bowlercntr>=6) && ((bowlercntr%6)==0)){//increment overs by 1
 
-				score=score+oversbowled+"</over>";
 				oversbowled=oversbowled+1;
+				score=score+oversbowled+"</over>";
+
 			}
 			
 					if (bowlingcntr>=0 && bowlingcntr<12.5) {
@@ -348,17 +405,18 @@ public class Bowlingprogrambowlers_Bprgb {
 			
 			
 			bowlercntr=bowlercntr+1;
-			
-			score=score+"</score>";
-			writematchstatisticsandoversforbowler(bowler, score, outcome);
 
 		}
 
+		score=score+"</score>";
 		
+		writematchstatisticsandoversforbowler(bowler, oversbowled, score, outcome);
+
+		return outcome;
 	}
 	
 	
-	public void writematchstatisticsandoversforbowler(int bowler, String score, int[] matchsequenceoutcome) {
+	public void writematchstatisticsandoversforbowler(int bowler, int overbeingbowled, String score, int[] matchsequenceoutcome) {
 
 		//PrintWriter outtest1= null;
 		
@@ -404,7 +462,7 @@ public class Bowlingprogrambowlers_Bprgb {
 	  	  //normalize it to 900 balls for a bowler 
 	  	  //Bowlingprogrambowlers_Bprgb bowlersprogrammatchgeneratebowlingsequence = new Bowlingprogrambowlers_Bprgb();
 	  	  
-				score=score+"</score>";
+				//score=score+"</score>";
 				pw.print(score);
 				pw.close();
 
@@ -416,7 +474,7 @@ public class Bowlingprogrambowlers_Bprgb {
 	
 	}
 	
-	public int[] readbowlersequence(int bowler){
+	public int[] readbowlersequence(int bowler, int[] bowleroutcome){
 		//read from properties file - // todo
 		int oversbowled;
 		int matchesplayed;
@@ -443,13 +501,49 @@ public class Bowlingprogrambowlers_Bprgb {
 			overnumber[i]=Match.Currentmatchbowlerordersequence[i];
 		}
 		
-		int scoreandwickets[]=new int[6];
+		int scoreandwickets[]=new int[12];//todo read from properties
 
-		String dest;
-		dest="";
-		dest="bowler"+bowler+"sequenceandpatternfile.txt";
-		scoreandwickets=readbowleroverfromfilegenerateover(bowler, dest, matchesplayed);
-		
+		String bowlersourceinput;
+		bowlersourceinput="";
+		bowlersourceinput="bowler"+bowler+"sequenceandpatternfile.txt";
+		//scoreandwickets=readbowleroverfromfilegenerateover(bowler, bowlersourceinput, matchesplayed);
+		scoreandwickets=bowleroutcome;
+		try {
+	    String dest;
+	    dest="";
+	    dest ="C:\\kirkaet\\match"+matchesplayed+"bowler"+bowler+"matchresultscore.txt";
+	    
+	    File matchresultscorefile = new File(dest); //dest
+
+	    FileWriter fwmrsfp = new FileWriter(matchresultscorefile,true);
+	  	BufferedWriter bwmrsfp = new BufferedWriter(fwmrsfp);
+	  	PrintWriter pwmrsfp = new PrintWriter(bwmrsfp);
+
+	        if(!matchresultscorefile.exists()){
+	    	  matchresultscorefile.createNewFile();
+		  }
+	        
+	        String scoreoutcome;
+	        String runsorwicketoutcome;
+	        runsorwicketoutcome="";
+	        scoreoutcome="<match><score>";
+	        scoreoutcome="<bowler>"+bowler+"<bowler>";
+	        int j;
+	        int jcntr;
+	        j=0;
+	        jcntr=matchesplayed*6;
+	        for(jcntr=j;jcntr<j;jcntr++) {
+	        	runsorwicketoutcome="<runsorwicketoutcome>"+scoreandwickets[j]+"</runsorwicketoutcome>";
+	        	j++;
+	        }
+	        scoreoutcome=scoreoutcome+runsorwicketoutcome+"<match/></score>";
+	        pwmrsfp.print(scoreoutcome);
+	        pwmrsfp.close();
+
+	        
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		//generate bowler sequence
 		//bowlersequence = 
 		
