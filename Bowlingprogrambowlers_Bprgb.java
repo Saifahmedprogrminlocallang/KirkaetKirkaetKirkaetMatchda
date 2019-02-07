@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import com.testing.ahmed.Bowlingprogrambowlers_Bprgb.Match;
+import com.testing.ahmed.PlayGame.Match;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
@@ -19,29 +19,7 @@ import java.util.Scanner;
 
 public class Bowlingprogrambowlers_Bprgb {
 	
-	public static class Match {
-		
-		static String Matchstatistics="C:\\kirkaet\\MatchStatsmatchstatistics.txt";
-		static int matchesplayed=0;
-		static int oversbowledbyeverybowlerinthematch[]={0,0,0,0};
-		static int Currentmatchbowlerordersequence[]= {1,2,3,4};
-		
-		
-		public void intitializeMatch() {
-			matchesplayed=Bowlingprogrambowlers_Bprgb.readcounterfromfile("Match", Matchstatistics);
-			int i;
-			i=0;
-			for(i=1;i<=4;i++) {
-				Currentmatchbowlerordersequence[i]=Bowlingprogrambowlers_Bprgb.readcounterfromfile("oversbowled"+i, Matchstatistics);
-			}
-		}
-
-		
-		//TWO COUNTERS - Match
-		// AND oversbowled-i
-	}
-
-	
+	//PlayGame playgame = new PlayGame();
 	
 	public class PlayBallPlayMatchMatchStatistics {
 		int statisticsbowlerover[]=new int[6];
@@ -89,108 +67,161 @@ public class Bowlingprogrambowlers_Bprgb {
 		return name;	
 	}
 	
-	public void printScore(int option, int runsscored, int wickets) {
+	public void printScore(int option, int runsscored, int wickets, int batsmanflag) {
 		
-		System.out.println("bowler "+ option +"bowling. A ball is bowled");
-		System.out.println("The Score is - "+runsscored+" wickets - "+wickets);
-		
+		if (batsmanflag==1) {
+			System.out.println("bowler "+ option +"bowling. A ball is bowled. Batsman 1 is batting");
+			System.out.println("The Score is - "+Match.Currentscore +"runs and "+ Match.Currentwickets + " wickets");
+		} else if (batsmanflag==2) {
+			System.out.println("bowler "+ option +"bowling. A ball is bowled. Batsman 2 is batting");
+			System.out.println("The Score is - "+Match.Currentscore +"runs and "+ Match.Currentwickets + " wickets");
+		} 
+		if ((Match.Currentscore>=40) && (Match.Currentwickets<3) && (Match.ballsbowled<=36)) {
+			System.out.println("Lengaburu wins!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			System.exit(0);
+		} else if ((Match.Currentscore==40) && (Match.Currentwickets<=3) && (Match.ballsbowled<=36)) {
+			System.out.println("ITS A TIE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			System.exit(0);
+		} else if ((Match.Currentscore<40) && (Match.Currentwickets>=3) && (Match.ballsbowled<=36)) {
+			System.out.println("Enchai Wins!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			System.exit(0);
+		}
 	}
 	
-	public int[] Matchplayball(int[] bowleroutcome, int overorderforeverybowler, int cntr, int bowler) {
+	public int[] Matchplayball(int[] bowleroutcome, int overorderforeverybowler, int cntr, int bowler, int matchesplayed) {
 
 		String Commentary="";
 		int runsscored=0;
 		int equationmatchscorerunsscoredwicketstakenwicketsremaining[]=new int[2];
-		
+
 		int matchscore=0;
 		int wickets=0;
 		int wicketstakenflag=0;
-		int equationmatchscorerunsscored=37;
-		int equationwicketstakenwicketsremaining=4;
+		int equationmatchscorerunsscored=40; // read from properties file
+		int equationwicketstakenwicketsremaining=3;
 		int i=0;
 		int j=0;
 		int overnumber[]=new int[4];
-		int scoreandwicketsforover[]=new int[12];
+		int scoreandwicketsforover[]=new int[12]; //do read from properties file
 		int option;
 		option=bowler;
 		
-		//for(i=0;i<4;i++) {
+		/*for(i=0;i<4;i++) {
 			overnumber[i]=Match.Currentmatchbowlerordersequence[i];
-
-			//scoreandwicketsforover= readbowlersequence(overorderforeverybowler, bowleroutcome); //Async -to read from generated file
-			scoreandwicketsforover= bowleroutcome;//Sync
+		}*/
+			if (matchesplayed>0) {
+				scoreandwicketsforover= readbowlersequence(overorderforeverybowler, bowleroutcome, matchesplayed); //Async -to read from generated file
+			} else {
+				scoreandwicketsforover= bowleroutcome;//Sync
+			}
 			
 			int jcntr;
 			jcntr=0;
-			j=Match.matchesplayed*6;
+			j=matchesplayed*6;
 			int jcntrlength;
 			jcntrlength=0;
 			jcntrlength=j+6;
+			int batsmanflag;
+			batsmanflag=1;
 			
 			for (jcntr=j;jcntr<jcntrlength;jcntr++) {
 				if (scoreandwicketsforover[jcntr]==0) {
 					runsscored=runsscored+0;
-				printScore(option,runsscored,wickets);
+					Match.Currentscore=Match.Currentscore+0;
+					batsmanflag=1;
+					equationmatchscorerunsscored=equationmatchscorerunsscored-0;
+				printScore(option,runsscored,wickets,batsmanflag);
 				}
 				else if(scoreandwicketsforover[jcntr]==1) { 
 					runsscored=runsscored+1;
-				printScore(option,runsscored,wickets);
+					Match.Currentscore=Match.Currentscore+1;
+					batsmanflag=2;
+					equationmatchscorerunsscored=equationmatchscorerunsscored-1;
+				printScore(option,runsscored,wickets,batsmanflag);
 				}
 				else if(scoreandwicketsforover[jcntr]==2) {
 					runsscored=runsscored+2;
-				printScore(option,runsscored,wickets);
+					Match.Currentscore=Match.Currentscore+2;
+					batsmanflag=1;
+					equationmatchscorerunsscored=equationmatchscorerunsscored-2;
+				printScore(option,runsscored,wickets,batsmanflag);
 				}
 				else if(scoreandwicketsforover[jcntr]==3) {
 					runsscored=runsscored+3;
-				printScore(option,runsscored,wickets);
+					Match.Currentscore=Match.Currentscore+3;
+					batsmanflag=2;
+					equationmatchscorerunsscored=equationmatchscorerunsscored-3;
+				printScore(option,runsscored,wickets,batsmanflag);
 				}
 				else if(scoreandwicketsforover[jcntr]==4) {
 					runsscored=runsscored+4;
-				printScore(option,runsscored,wickets);
+					Match.Currentscore=Match.Currentscore+4;
+					batsmanflag=1;
+					equationmatchscorerunsscored=equationmatchscorerunsscored-4;
+				printScore(option,runsscored,wickets,batsmanflag);
 				}
 				else if(scoreandwicketsforover[jcntr]==5) {
 					runsscored=runsscored+5;
-				printScore(option,runsscored,wickets);
+					Match.Currentscore=Match.Currentscore+5;
+					batsmanflag=2;
+					equationmatchscorerunsscored=equationmatchscorerunsscored-5;
+				printScore(option,runsscored,wickets,batsmanflag);
 				}
 				else if(scoreandwicketsforover[jcntr]==6) {
 					runsscored=runsscored+6;
-				printScore(option,runsscored,wickets);
+					Match.Currentscore=Match.Currentscore+6;
+					batsmanflag=1;
+					equationmatchscorerunsscored=equationmatchscorerunsscored-6;
+				printScore(option,runsscored,wickets,batsmanflag);
 				}
 				else if(scoreandwicketsforover[jcntr]==-1) {
 					wickets=wickets+1;
+					Match.Currentwickets=Match.Currentwickets+1;
+					batsmanflag=2;
+					equationwicketstakenwicketsremaining=equationwicketstakenwicketsremaining-1;
 				wicketstakenflag=1;
-				printScore(option,runsscored,wickets);
+				printScore(option,runsscored,wickets,batsmanflag);
 				}
+				Match.ballsbowled=Match.ballsbowled+1;
 			}	//for 1 over	
 			
-			if ((wicketstakenflag==1) && wickets<4) {
-				equationmatchscorerunsscoredwicketstakenwicketsremaining[1]=wickets+equationmatchscorerunsscoredwicketstakenwicketsremaining[1];
-			} else if (runsscored<=37){
-				equationmatchscorerunsscoredwicketstakenwicketsremaining[0]=runsscored+equationmatchscorerunsscoredwicketstakenwicketsremaining[0];
+			if ((wicketstakenflag==1) && (Match.Currentwickets<3)) {
+				equationmatchscorerunsscoredwicketstakenwicketsremaining[1]=Match.Currentwickets+equationmatchscorerunsscoredwicketstakenwicketsremaining[1];
+			} else if (Match.Currentscore<40){
+				equationmatchscorerunsscoredwicketstakenwicketsremaining[0]=Match.Currentscore+equationmatchscorerunsscoredwicketstakenwicketsremaining[0];
+			}
+			
+			if ((Match.ballsbowled>=36) && (Match.Currentwickets<3) && (Match.Currentscore>=40)) {
+				System.out.println("Match ends -- Lengaburu wins!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				System.exit(0);
 			}
 			
 		//return false or true to indicate -- match should be continued or stopped - win or lose
 		return equationmatchscorerunsscoredwicketstakenwicketsremaining;
 	}
 	
-	public int CheckEQCcheckequation(int[] equationsrunsscoredwicketsremaining, int icntr){
+	public int CheckEQCcheckequation(int Currentscore, int Currentwickets, int icntr){
 		
 		int result;
 		result=0;
+		int runs;
+		runs=Match.Currentscore;
+		int wickets;
+		wickets=Match.Currentwickets;
 		
-		if ((equationsrunsscoredwicketsremaining[0]>=37) && (equationsrunsscoredwicketsremaining[1]<4) && (icntr<=4)) {
+		if ((Match.Currentscore>=40) && (Match.Currentwickets<3) && (icntr<=4) && (Match.ballsbowled>=36)) {
 			System.out.println("Lengaburu wins!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 			result=1;	
-		} else if ((equationsrunsscoredwicketsremaining[0]==37) && (equationsrunsscoredwicketsremaining[1]<4) && (icntr<=4)) {
+		} else if ((Match.Currentscore==40) && (Match.Currentwickets<3) && (icntr<=4) && (Match.ballsbowled>=36)) {
 			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ITS A TIE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 			result=0;	
-		} else if ((equationsrunsscoredwicketsremaining[0]>=37) && (equationsrunsscoredwicketsremaining[1]<4) && (icntr==4)) {
+		} else if ((Match.Currentscore>=40) && (Match.Currentwickets<3) && (icntr<=4) && (Match.ballsbowled>=36)) {
 			System.out.println("Lengaburu Wins!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 			result=1;	
-		} else if ((equationsrunsscoredwicketsremaining[0]<37) && (equationsrunsscoredwicketsremaining[1]>4) && (icntr==4)) {
+		} else if ((Match.Currentscore<40) && (Match.Currentwickets>=3) && (icntr<=4) && (Match.ballsbowled>=36)) {
 			System.out.println("Enchai Wins!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 			result=2;	
-		} else if ((equationsrunsscoredwicketsremaining[0]<37) && (equationsrunsscoredwicketsremaining[1]<=4) && (icntr==4)) {
+		} else if ((Match.Currentscore<40) && (Match.Currentwickets<=3) && (icntr<=4) && (Match.ballsbowled>=36)) {
 			System.out.println("Enchai Wins!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 			result=2;	
 		}
@@ -201,7 +232,7 @@ public class Bowlingprogrambowlers_Bprgb {
 
 	
 	//public int[] Matchgeneratebbowlersovers(int bowler, int over) {
-	public int[] Matchgeneratebbowlersovers(int bowler, int over) {
+	public int[] Matchgeneratebbowlersovers(int bowler, int over, int matchesplayed) {
 		
 		//int commentary = generatecommentary(bowlername, over);
 		int  bowlingprowess[];
@@ -264,16 +295,21 @@ public class Bowlingprogrambowlers_Bprgb {
 			}
 		}
 		
+		/******
 		double bowlingcountergen;
 		double randomnumbergen;
+		*******/
+		
 		int bowlercntr;
 		bowlercntr=1;
 		
+		/*****************
 		long seedrandom;
 		seedrandom = 3600; //make it 3600 for 4 bowlers 900 balls each to maintain random number like sequence
 		double randomgenerated;
 		
 		Random generator = new Random(seedrandom);
+		****************/
 		int cntr;
 		cntr=0;
 		// bowler 1 sequence
@@ -284,7 +320,7 @@ public class Bowlingprogrambowlers_Bprgb {
 		score="<score>"+"<bowler>"+bowler+"</bowler>";
 		
 		String source;
-		source="C:\\kirkaet\\cntrfile_cntrfile.txt";
+		source="D:\\kirkaet\\MatchStatsandmatchstatistics.txt";
 		
 		int wickets;
 		wickets=0;
@@ -297,16 +333,22 @@ public class Bowlingprogrambowlers_Bprgb {
 		score=score+"<over>";
 		
 		//public static int cntr1=bowler1cntr[1];
-
+		GenerateRandomNumber genRandomNumber = new GenerateRandomNumber();
+		
 		while (bowlercntr<=12) { //900
+			/****************
 			randomgenerated = generator.nextDouble();
 			System.out.println("randomgenerated - "+randomgenerated);
 			randomnumbergen=randomgenerated*100;
 			System.out.println("randomnumbergen - "+randomgenerated);
 			bowlingcntr = (int)randomnumbergen;//TO GENERATE RANDOM ORDER OF SCORE
 			System.out.println("int randomnumber - "+bowlingcntr);
-
-			
+			*****/
+			if (matchesplayed>0) {
+				
+			} else {
+				bowlingcntr = genRandomNumber.generateRandomNumber();//TO GENERATE RANDOM ORDER OF SCORE
+			}
 			if ((bowlercntr>=6) && ((bowlercntr%6)==0)){//increment overs by 1
 
 				oversbowled=oversbowled+1;
@@ -474,12 +516,11 @@ public class Bowlingprogrambowlers_Bprgb {
 	
 	}
 	
-	public int[] readbowlersequence(int bowler, int[] bowleroutcome){
-		//read from properties file - // todo
+	public int[] readbowlersequence(int bowler, int[] bowleroutcome, int matchesplayed){
+		//read from properties file - //do
 		int oversbowled;
-		int matchesplayed;
+		//int matchesplayed;
 		oversbowled=0;
-		matchesplayed=0;
 		
 		int counter;
 		counter=0;
@@ -490,28 +531,33 @@ public class Bowlingprogrambowlers_Bprgb {
 		//check match statistics
 		int overnumber[] = new int[4];//read from MatchStatsmatchstatistics.txt
 
-		matchesplayed=Match.matchesplayed;
+		//matchesplayed=Match.matchesplayed;
 		oversbowled=matchesplayed;
 		
 		int i;
 		i=0;
 		
-		//todo generate order of bowlers by reading from dest file as per this order
+		//do generate order of bowlers by reading from dest file as per this order
 		for(i=0;i<4;i++) {
-			overnumber[i]=Match.Currentmatchbowlerordersequence[i];
+			overnumber[i]=Match.Currentmatchbowlerordersequence[i];//read from properties file or its equal to matchesplayed assuming 1 over for each bowler
 		}
 		
-		int scoreandwickets[]=new int[12];//todo read from properties
+		int scoreandwickets[]=new int[12];//do read from properties
 
 		String bowlersourceinput;
 		bowlersourceinput="";
 		bowlersourceinput="bowler"+bowler+"sequenceandpatternfile.txt";
-		//scoreandwickets=readbowleroverfromfilegenerateover(bowler, bowlersourceinput, matchesplayed);
-		scoreandwickets=bowleroutcome;
+
+		if (matchesplayed>0) {
+			scoreandwickets=readbowleroverfromfilegenerateover(bowler, bowlersourceinput, oversbowled, matchesplayed);
+		} else {
+			scoreandwickets=bowleroutcome;
+		}
+
 		try {
 	    String dest;
 	    dest="";
-	    dest ="C:\\kirkaet\\match"+matchesplayed+"bowler"+bowler+"matchresultscore.txt";
+	    dest ="C:\\kirkaet\\match"+matchesplayed+"matchresultscore.txt";
 	    
 	    File matchresultscorefile = new File(dest); //dest
 
@@ -555,8 +601,8 @@ public class Bowlingprogrambowlers_Bprgb {
 	}
 	
 	
-	
-	public int[] readbowleroverfromfilegenerateover(int bowler, String dest, int overnumber) {
+	//read from genrated random numbers
+	public int[] readbowleroverfromfilegenerateover(int bowler, String dest, int overnumber, int matchesplayed) {
 		
 		
 		//dest bowler file where the random bowling sequence is generated
@@ -603,8 +649,8 @@ public class Bowlingprogrambowlers_Bprgb {
 			String regex = "";
 			regex = "<over>"+ overnumber;
 
-			int positionstartarray[] = new int[900];//read number of overs in match from Match statistics static class
-			int positionendarray[] = new int[900];
+			int positionstartarray[] = new int[30000];//read number of overs in match from Match statistics static class
+			int positionendarray[] = new int[30000];
 			
 		    try {
 
@@ -665,7 +711,7 @@ public class Bowlingprogrambowlers_Bprgb {
 			ballandrunscounterpropertystring="";
 			int k;
 			k=0;
-			k=Match.matchesplayed; //number of overs bowled
+			k=matchesplayed; //number of overs bowled
 			//read the <ball> and <rorwoutcomeresult> result data into an array
 			ballandrunscounterpropertystring=cntr_read_read.substring(positionendarray[k],positionstartarray[k+1]-1);
 
@@ -757,221 +803,6 @@ public class Bowlingprogrambowlers_Bprgb {
 		
 	}
 
-	//read counter
-	public static int readcounterfromfile(String patternmatch, String cntrfilesourcenoorlightplayBallMatch) {
-		
-		String counterfilecntr = "C:\\kirkaet\\cntrfile_cntrfile.txt";	
-		
-		File cntr_f = new File(cntrfilesourcenoorlightplayBallMatch);
-		
-		File cntrNew_f = new File(cntrfilesourcenoorlightplayBallMatch);
-	
-		int int_cntr_read_read;
-		int_cntr_read_read=0;
-		
-		int cntr_read_readflag;
-		cntr_read_readflag=0;
-	
-		int int_cntr_read_write_flag;
-		int_cntr_read_write_flag=0;
-	
-	if (cntr_f.exists()) {
-		
-	try {
-			StringBuilder cntrcontentBuilder = new StringBuilder();
-			BufferedReader br = new BufferedReader(new FileReader(cntrfilesourcenoorlightplayBallMatch));
-			try {
-
-				String scntrCurrentLine = null;
-				while ((scntrCurrentLine = br.readLine()) != null) {
-					cntrcontentBuilder.append(scntrCurrentLine);
-					cntr_read_readflag=1;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			br.close();
-
-			String cntr_read_read = null;
-			cntr_read_read = cntrcontentBuilder.toString();
-			System.out.println("cntr_read_read -" + cntr_read_read);			
-			
-			String regex = "";
-			regex = "<"+ patternmatch +">";
-			Pattern p = Pattern.compile(regex);
-			Matcher m = p.matcher(cntr_read_read);
-			System.out.println("cntr_read_read - " + cntr_read_read);
-			int x;
-			int y;
-			x=0;
-			y=0;
-			
-			int positionstartarray = 0;
-			int positionendarray = 0;
-			while (m.find()) {
-
-				positionstartarray = m.start() + regex.length()-1; // <counter> -- //bowler1cntr
-				System.out.println("positionstartarray -" + positionstartarray);
-
-				System.out.println("positionstartarray - " + positionstartarray);
-		    	
-				x = x + 1;
-
-			}
-			
-			
-			String regexxmlend = "";
-			regexxmlend = "</"+ patternmatch +">";
-			Pattern pclose = Pattern.compile(regexxmlend);
-			Matcher mclose = pclose.matcher(cntr_read_read);
-			System.out.println("cntr_read_read - " + cntr_read_read);
-		
-			while (mclose.find()) {
-
-				positionendarray = mclose.start()-1; // <counter> -- //bowler1cntr
-				System.out.println("positionendarray -" + positionendarray);
-
-				y = y + 1;
-
-			}
-			
-			String counterproperty;
-			counterproperty="";
-			
-			counterproperty=cntr_read_read.substring(positionstartarray,positionendarray);
-			
-			if (cntr_read_readflag==1) {
-				int_cntr_read_read= Integer.parseInt(counterproperty);						
-			}else {
-				int_cntr_read_read =0;
-			}
-			//int_cntr_read_read=int_cntr_read_read-1; //decrement counter by 1 till its greater than 0
-	
-	
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-		
-	}
-	
-	return int_cntr_read_read;
-	
-	}
-	
-	//write counter to file and return success - true or false -
-	public boolean writecountertofile(String counter, String dest) {
-	
-	String counterfilecntr = "C:\\Webserver\\cntrfile_cntrfile.txt";	
-	
-	File cntr_f = new File(counterfilecntr);
-	
-	File cntrNew_f = new File(counterfilecntr);
-
-	int cntr_read_readflag;
-	cntr_read_readflag=0;
-
-	int int_cntr_read_write_flag;
-	int_cntr_read_write_flag=0;
-	
-	if (cntr_f.exists()) {
-		
-		try {
-			StringBuilder cntrcontentBuilder = new StringBuilder();
-			BufferedReader br = new BufferedReader(new FileReader(counterfilecntr));
-			try {
-
-				String scntrCurrentLine = null;
-				while ((scntrCurrentLine = br.readLine()) != null) {
-					cntrcontentBuilder.append(scntrCurrentLine);
-					cntr_read_readflag=1;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			br.close();
-
-			String cntr_read_read = null;
-			int int_cntr_read_read =0;
-			cntr_read_read = cntrcontentBuilder.toString();
-			System.out.println("cntr_read_read -" + cntr_read_read);			
-			
-			String regex = "";
-			regex = "<"+ counter +">";
-			Pattern p = Pattern.compile(regex);
-			Matcher m = p.matcher(cntr_read_read);
-			System.out.println("cntr_read_read - " + cntr_read_read);
-			int x;
-			int y;
-			x=0;
-			y=0;
-			
-			int positionstartarray = 0;
-			int positionendarray = 0;
-			while (m.find()) {
-
-				positionstartarray = m.start() + counter.length()+2; // <counter> -- //bowler1cntr
-				System.out.println("positionstartarray -" + positionstartarray);
-
-				System.out.println("positionstartarray - " + positionstartarray);
-		    	
-				x = x + 1;
-
-			}
-			
-			
-			String regexxmlend = "";
-			regex = "</"+ counter +">";
-			Pattern pclose = Pattern.compile(regexxmlend);
-			Matcher mclose = pclose.matcher(cntr_read_read);
-			System.out.println("cntr_read_read - " + cntr_read_read);
-		
-			while (mclose.find()) {
-
-				positionstartarray = mclose.start()-1; // <counter> -- //bowler1cntr
-				System.out.println("positionendarray -" + positionendarray);
-
-				System.out.println("positionendarray - " + positionendarray);
-		    	
-				y = y + 1;
-
-			}
-			
-			String counterproperty;
-			counterproperty="";
-			
-			counterproperty=cntr_read_read.substring(positionstartarray,positionendarray);
-			
-			if (cntr_read_readflag==1) {
-				int_cntr_read_read= Integer.parseInt(counterproperty);						
-			}else {
-				int_cntr_read_read =0;
-			}
-			/******* DECREMENT COUNTER *********/
-			int_cntr_read_read=int_cntr_read_read-1; //decrement counter by 1 till its greater than 0
-	
-	if (cntrNew_f.createNewFile()) {
-		PrintWriter outcntrtestfile2 = new PrintWriter(counterfilecntr);
-		outcntrtestfile2.print("<"+ counter +">"+int_cntr_read_read+"</"+ counter +">");
-		int_cntr_read_write_flag=1;
-		outcntrtestfile2.close();
-	}
-	
-	
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-		
-	}
-	if (int_cntr_read_write_flag==1) {
-		return true;
-	} else {
-		return false;
-	}
-	
-	}
-	
 	
 	
 	
