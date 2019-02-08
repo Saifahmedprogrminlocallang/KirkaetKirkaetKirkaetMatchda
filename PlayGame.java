@@ -14,7 +14,7 @@ public class PlayGame {
 		//static int matchesplayed;
 		static int oversbowledbyeverybowlerinthematch[]={0,0,0,0};
 		static int Currentmatchbowlerordersequence[]= {1,2,3,4};
-
+		static int WinnerFlag;
 		int i;
 
 		public void intitializeMatch() {
@@ -23,7 +23,8 @@ public class PlayGame {
 			Matchscore=40; // read from properties file 
 			Matchwickets=3;
 			ballsbowled=0;
-			Matchstatistics="D:\\Kirkaet\\MatchStatsandmatchstatistics.xml";
+			Matchstatistics="C:\\Kirkaet\\MatchStatsandmatchstatistics.xml";
+			WinnerFlag=5;//match in progress
 			System.out.println("Match sequence numbers data for bowlers generated for 2 matches only");
 			//System.out.println("Matchstatistics Match Matchesplayed- "+matchesplayed);
 			//matchesplayed=0; // read from property file

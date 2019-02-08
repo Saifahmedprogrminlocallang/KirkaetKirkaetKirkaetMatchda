@@ -14,6 +14,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import com.testing.ahmed.PlayGame.Match;
+
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -25,6 +28,8 @@ import java.nio.file.Files;
 
 public class ExtraFunctionsandMethods {
 
+	
+	/*******
 	//Match Statistic file = "c:\\kirkaet\\MatchStatsmatchstatistics.txt";
 	
 		//read counter
@@ -32,53 +37,6 @@ public class ExtraFunctionsandMethods {
 	//public int readcounterfromfile(String patternmatch, String cntrfilesourcenoorlightplayBallMatchfilepath) {
 	public int readcounterfromfile(String patternmatch, String cntrfilesourcenoorlightplayBallMatchfilepath) {
 		
-		/**********
-		File cntrfilesourcenoorlightplayBallMatchfile= new File(cntrfilesourcenoorlightplayBallMatchfilepath);
-
-		String propertyfilefilepath;
-		propertyfilefilepath="";
-		try {
-			propertyfilefilepath=cntrfilesourcenoorlightplayBallMatchfile.getCanonicalPath();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		File cntr_f = new File(propertyfilefilepath);
-		
-		File cntrNew_f =  new File(propertyfilefilepath);
-	
-		int int_cntr_read_read;
-		int_cntr_read_read=0;
-		
-		int cntr_read_readflag;
-		cntr_read_readflag=0;
-	
-		int int_cntr_read_write_flag;
-		int_cntr_read_write_flag=0;
-				
-		
-	if (cntrNew_f.exists()) {
-		
-	try {
-			StringBuilder cntrcontentBuilder = new StringBuilder();
-			BufferedReader br = new BufferedReader(new FileReader(cntrfilesourcenoorlightplayBallMatchfile));
-			try {
-
-				String scntrCurrentLine = null;
-				while ((scntrCurrentLine = br.readLine()) != null) {
-					cntrcontentBuilder.append(scntrCurrentLine);
-					cntr_read_readflag=1;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			br.close();
-
-			String cntr_read_read = null;
-			cntr_read_read = cntrcontentBuilder.toString();
-			System.out.println("cntr_read_read -" + cntr_read_read);			
-	****/
 		
 		String str; 
 		str="";
@@ -87,7 +45,7 @@ public class ExtraFunctionsandMethods {
 			
 			 //File file = new File("D:\\Kirkaet\\MatchStatsandmatchstatistics.txt");  
 
-			 Reader in = new FileReader("D:\\Kirkaet\\MatchStatsandmatchstatistics.txt");
+			 Reader in = new FileReader(Match.Matchstatistics);
 			 //BufferedReader br = new BufferedReader(in);
 			 //BufferredReader br = new BufferredReader(fr);
 
@@ -213,25 +171,18 @@ public class ExtraFunctionsandMethods {
 	
 	//propertiesfile
 	//Match Statistics file	"D:\\kirkaet\\MatchStatsandmatchstatistics.txt"
-		String propertyfilefilepath;
-		propertyfilefilepath="";
-		try {
-			propertyfilefilepath=propertyfile.getCanonicalPath();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		
 	File counterfilecntr = propertyfile;	
 	
 	File cntr_f = counterfilecntr;
 	
 	File cntrNew_f = counterfilecntr;
-	File writecntr_f = new File(propertyfilefilepath);
+	File writecntr_f = new File(propertyfilepath);
 	
-	File writecntrNew_f =  new File(propertyfilefilepath);
+	File writecntrNew_f =  new File(propertyfilepath);
 
 	
-	File writecounterfilecntrfile=new File (propertyfilefilepath);
+	File writecounterfilecntrfile=new File (propertyfilepath);
 
 	int cntr_read_readflag;
 	cntr_read_readflag=0;
@@ -340,8 +291,16 @@ public class ExtraFunctionsandMethods {
 			} 
 			String new_cntr_read_read;
 			new_cntr_read_read="";
+			String regexxmlcounterstr;
+			regexxmlcounterstr="";
+			regexxmlcounterstr="<"+ counter +">"+old_int_cntr_read_read+"</"+ counter +">";
 			
-			new_cntr_read_read=cntr_read_read.replace("<"+ counter +">"+old_int_cntr_read_read+"</"+ counter +">","<"+ counter +">"+int_cntr_read_read+"</"+ counter +">");
+			String replacement;
+			replacement="";
+			replacement="<"+ counter +">"+int_cntr_read_read+"</"+ counter +">";
+			
+			new_cntr_read_read=cntr_read_read.replaceFirst(regexxmlcounterstr, replacement);
+			
 			System.out.println("replace string is new_cntr_read_read -  "+new_cntr_read_read);
 			System.out.println("write to file -  "+counterfilecntr);
 			
@@ -353,7 +312,7 @@ public class ExtraFunctionsandMethods {
 
 				//PrintWriter outcntrtestfile2 = new PrintWriter(cntrbw);
 				//outcntrtestfile2.print(new_cntr_read_read);
-				writeFileUsingStream(new_cntr_read_read,propertyfile);
+				writeFileUsingStream(new_cntr_read_read,propertyfilepath);
 				
 				int_cntr_read_write_flag=1;
 				//outcntrtestfile2.close();
@@ -377,15 +336,16 @@ public class ExtraFunctionsandMethods {
 	
 	// to write sno, mobilenumber, recrdstartarr, recrdendarray to String and then
 	// to Printwriter out file
-	public void writeFileUsingStream(String recrddatainput, File dest2) throws IOException {
+	public void writeFileUsingStream(String recrddatainput, String propertypath) throws IOException {
 		InputStream is = null;
 		OutputStream os = null;
 		try {
 			// is = new FileInputStream(source);
 			StringBuffer strbuffer = new StringBuffer(recrddatainput);
 			// os = new FileOutputStream(dest2);
-
-			FileWriter fw = new FileWriter(dest2);
+			File inputfilef = new File(propertypath);
+			//FileWriter fw = new FileWriter(dest2);
+			FileWriter fw = new FileWriter(inputfilef);			
 			BufferedWriter bw = new BufferedWriter(fw);
 			PrintWriter out = new PrintWriter(bw);
 
@@ -397,6 +357,8 @@ public class ExtraFunctionsandMethods {
 
 			}
 			out.close();
+			bw.close();
+			fw.close();
 		} finally {
 			// is.close();
 			// out.close();
@@ -404,7 +366,5 @@ public class ExtraFunctionsandMethods {
 		}
 	}
 	
-	
-	
-
+	*******/
 }

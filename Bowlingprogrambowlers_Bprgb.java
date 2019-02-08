@@ -13,7 +13,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -78,13 +81,13 @@ public class Bowlingprogrambowlers_Bprgb {
 		} 
 		if ((Match.Currentscore>=40) && (Match.Currentwickets<3) && (Match.ballsbowled<=36)) {
 			System.out.println("Lengaburu wins!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-			System.exit(0);
+			Match.WinnerFlag=1;
 		} else if ((Match.Currentscore==40) && (Match.Currentwickets<=3) && (Match.ballsbowled<=36)) {
 			System.out.println("ITS A TIE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-			System.exit(0);
+			Match.WinnerFlag=0;
 		} else if ((Match.Currentscore<40) && (Match.Currentwickets>=3) && (Match.ballsbowled<=36)) {
 			System.out.println("Enchai Wins!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-			System.exit(0);
+			Match.WinnerFlag=2;
 		}
 	}
 	
@@ -295,21 +298,9 @@ public class Bowlingprogrambowlers_Bprgb {
 			}
 		}
 		
-		/******
-		double bowlingcountergen;
-		double randomnumbergen;
-		*******/
-		
 		int bowlercntr;
 		bowlercntr=1;
 		
-		/*****************
-		long seedrandom;
-		seedrandom = 3600; //make it 3600 for 4 bowlers 900 balls each to maintain random number like sequence
-		double randomgenerated;
-		
-		Random generator = new Random(seedrandom);
-		****************/
 		int cntr;
 		cntr=0;
 		// bowler 1 sequence
@@ -320,7 +311,7 @@ public class Bowlingprogrambowlers_Bprgb {
 		score="<score>"+"<bowler>"+bowler+"</bowler>";
 		
 		String source;
-		source="D:\\kirkaet\\MatchStatsandmatchstatistics.txt";
+		source=Match.Matchstatistics;
 		
 		int wickets;
 		wickets=0;
@@ -335,18 +326,18 @@ public class Bowlingprogrambowlers_Bprgb {
 		//public static int cntr1=bowler1cntr[1];
 		GenerateRandomNumber genRandomNumber = new GenerateRandomNumber();
 		
-		while (bowlercntr<=12) { //900
-			/****************
-			randomgenerated = generator.nextDouble();
-			System.out.println("randomgenerated - "+randomgenerated);
-			randomnumbergen=randomgenerated*100;
-			System.out.println("randomnumbergen - "+randomgenerated);
-			bowlingcntr = (int)randomnumbergen;//TO GENERATE RANDOM ORDER OF SCORE
-			System.out.println("int randomnumber - "+bowlingcntr);
-			*****/
-			if (matchesplayed>0) {
-				
-			} else {
+		int[] bowlercoutcome= new int[12];
+
+		if (matchesplayed>0) {
+			bowlercoutcome = readbowlersequence(bowlercntr, bowlercoutcome, matchesplayed);
+		}
+		
+		int batsmanflag;
+		batsmanflag=1;
+
+		while (bowlercntr<=6) { //900 number of balls to be bowled by every bowler
+
+			if (matchesplayed==0) {
 				bowlingcntr = genRandomNumber.generateRandomNumber();//TO GENERATE RANDOM ORDER OF SCORE
 			}
 			if ((bowlercntr>=6) && ((bowlercntr%6)==0)){//increment overs by 1
@@ -366,6 +357,8 @@ public class Bowlingprogrambowlers_Bprgb {
 						//matchscore=matchscore+0;
 						score=score+"<ball>"+bowlercntr+"</ball>";
 						score=score+"<rorwoutcomeresult>"+0+"</rorwoutcomeresult>"; //runorwicketoutcomeresult
+						Match.Currentscore=Match.Currentscore+0;
+						printScore(bowler,Match.Currentscore,Match.Currentwickets,batsmanflag);
 						} else if (bowlingcntr>=12.5 && bowlingcntr<25) {
 							cntr=bowlerselected[2];
 							//cntr=cntr-1;
@@ -377,6 +370,9 @@ public class Bowlingprogrambowlers_Bprgb {
 							//matchscore=matchscore+1;
 							score=score+"<ball>"+bowlercntr+"</ball>";
 							score=score+"<rorwoutcomeresult>"+1+"</rorwoutcomeresult>";
+							Match.Currentscore=Match.Currentscore+1;
+							batsmanflag=2;
+							printScore(bowler,Match.Currentscore,Match.Currentwickets,batsmanflag);
 						} else if (bowlingcntr>=25 && bowlingcntr<37.5) {
 							cntr=bowlerselected[3];
 							//cntr=cntr-1;
@@ -388,6 +384,8 @@ public class Bowlingprogrambowlers_Bprgb {
 							//matchscore=matchscore+2;
 							score=score+"<ball>"+bowlercntr+"</ball>";
 							score=score+"<rorwoutcomeresult>"+2+"</rorwoutcomeresult>";
+							Match.Currentscore=Match.Currentscore+2;
+							printScore(bowler,Match.Currentscore,Match.Currentwickets,batsmanflag);
 						} else if (bowlingcntr>=37.5 && bowlingcntr<50) {
 							cntr=bowlerselected[4];
 							//cntr=cntr-1;
@@ -398,7 +396,10 @@ public class Bowlingprogrambowlers_Bprgb {
 							}
 							//matchscore=matchscore+3;
 							score=score+"<ball>"+bowlercntr+"</ball>";
-							score=score+"<rorwoutcomeresult>"+3+"</rorwoutcomeresult>";				
+							score=score+"<rorwoutcomeresult>"+3+"</rorwoutcomeresult>";
+							Match.Currentscore=Match.Currentscore+3;
+							batsmanflag=1;
+							printScore(bowler,Match.Currentscore,Match.Currentwickets,batsmanflag);
 						} else if (bowlingcntr>=50 && bowlingcntr<62.5) {
 							cntr=bowlerselected[5];
 							//cntr=cntr-1;
@@ -409,7 +410,9 @@ public class Bowlingprogrambowlers_Bprgb {
 							}
 							//matchscore=matchscore+4;
 							score=score+"<ball>"+bowlercntr+"</ball>";
-							score=score+"<rorwoutcomeresult>"+4+"</rorwoutcomeresult>";				
+							score=score+"<rorwoutcomeresult>"+4+"</rorwoutcomeresult>";
+							Match.Currentscore=Match.Currentscore+4;
+							printScore(bowler,Match.Currentscore,Match.Currentwickets,batsmanflag);
 						} else if (bowlingcntr>=62.5 && bowlingcntr<75) {
 							cntr=bowlerselected[6];
 							//cntr=cntr-1;
@@ -420,7 +423,10 @@ public class Bowlingprogrambowlers_Bprgb {
 							}
 							//matchscore=matchscore+5;
 							score=score+"<ball>"+bowlercntr+"</ball>";
-							score=score+"<rorwoutcomeresult>"+5+"</rorwoutcomeresult>";				
+							score=score+"<rorwoutcomeresult>"+5+"</rorwoutcomeresult>";
+							Match.Currentscore=Match.Currentscore+5;
+							batsmanflag=2;
+							printScore(bowler,Match.Currentscore,Match.Currentwickets,batsmanflag);
 						} else if (bowlingcntr>=75 && bowlingcntr<87.5) {
 							cntr=bowlerselected[7];
 							//cntr=cntr-1;
@@ -431,7 +437,9 @@ public class Bowlingprogrambowlers_Bprgb {
 							}
 							//matchscore=matchscore+6;
 							score=score+"<ball>"+bowlercntr+"</ball>";
-							score=score+"<rorwoutcomeresult>"+6+"</rorwoutcomeresult>";				
+							score=score+"<rorwoutcomeresult>"+6+"</rorwoutcomeresult>";
+							Match.Currentscore=Match.Currentscore+6;
+							printScore(bowler,Match.Currentscore,Match.Currentwickets,batsmanflag);
 						} else if (bowlingcntr>=87.5 && bowlingcntr<100) {
 							cntr=bowlerselected[8];
 							//cntr=cntr-1;
@@ -443,6 +451,9 @@ public class Bowlingprogrambowlers_Bprgb {
 							//wickets=wickets+1;
 							score=score+"<ball>"+bowlercntr+"</ball>";
 							score=score+"<rorwoutcomeresult>"+-1+"</rorwoutcomeresult>";
+							Match.Currentwickets=Match.Currentwickets-1;
+							batsmanflag=1;
+							printScore(bowler,Match.Currentscore,Match.Currentwickets,batsmanflag);
 						}
 			
 			
@@ -489,7 +500,7 @@ public class Bowlingprogrambowlers_Bprgb {
 		CurrentMatchOvericntr=1;
 		//CurrentMatchOvericntr=over;
 		
-	    File file =new File("C:\\kirkaet\\bowler"+bowler+"sequenceandpatternfile.txt");
+	    File file =new File("D:\\Kirkaet\\bowler"+bowler+"sequenceandpatternfile.txt");
 
 	    try {
 
@@ -549,7 +560,18 @@ public class Bowlingprogrambowlers_Bprgb {
 		bowlersourceinput="bowler"+bowler+"sequenceandpatternfile.txt";
 
 		if (matchesplayed>0) {
-			scoreandwickets=readbowleroverfromfilegenerateover(bowler, bowlersourceinput, oversbowled, matchesplayed);
+			int kxcntr;
+			int jxcntr;
+			int zxcntr;
+			jxcntr=0;
+	        kxcntr=0;
+	        zxcntr=0;
+	        kxcntr=matchesplayed*6;
+	        kxcntr=kxcntr+1;
+	        for(jxcntr=kxcntr;jxcntr<=kxcntr;jxcntr++) {
+	        	scoreandwickets[zxcntr]=readbowleroverfromfilegenerateover(bowler, bowlersourceinput, oversbowled, matchesplayed);
+	        	zxcntr=zxcntr+1;
+	        }
 		} else {
 			scoreandwickets=bowleroutcome;
 		}
@@ -557,7 +579,7 @@ public class Bowlingprogrambowlers_Bprgb {
 		try {
 	    String dest;
 	    dest="";
-	    dest ="C:\\kirkaet\\match"+matchesplayed+"matchresultscore.txt";
+	    dest ="D:\\kirkaet\\match"+matchesplayed+"matchresultscore.txt";
 	    
 	    File matchresultscorefile = new File(dest); //dest
 
@@ -579,13 +601,15 @@ public class Bowlingprogrambowlers_Bprgb {
 	        j=0;
 	        jcntr=matchesplayed*6;
 	        for(jcntr=j;jcntr<j;jcntr++) {
+	        	runsorwicketoutcome="<ball>"+jcntr+"</ball>";
 	        	runsorwicketoutcome="<runsorwicketoutcome>"+scoreandwickets[j]+"</runsorwicketoutcome>";
 	        	j++;
 	        }
 	        scoreoutcome=scoreoutcome+runsorwicketoutcome+"<match/></score>";
 	        pwmrsfp.print(scoreoutcome);
 	        pwmrsfp.close();
-
+	        bwmrsfp.close();
+	        fwmrsfp.close();
 	        
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -602,7 +626,7 @@ public class Bowlingprogrambowlers_Bprgb {
 	
 	
 	//read from genrated random numbers
-	public int[] readbowleroverfromfilegenerateover(int bowler, String dest, int overnumber, int matchesplayed) {
+	public int readbowleroverfromfilegenerateover(int bowler, String dest, int overnumber, int matchesplayed) {
 		
 		
 		//dest bowler file where the random bowling sequence is generated
@@ -613,8 +637,9 @@ public class Bowlingprogrambowlers_Bprgb {
 		
 		File cntrNew_f = new File(bowlercntrfilesourcenoorplayBallMatchComeon);
 
-		int scoreint_cntr_read_read[]=new int[6];
-	
+		int scoreint_cntr_read_read;
+		scoreint_cntr_read_read=0;
+		
 		int int_cntr_read_read;
 		int_cntr_read_read=0;
 		
@@ -660,7 +685,7 @@ public class Bowlingprogrambowlers_Bprgb {
 			int x;
 			x=0;
 			
-			while (m.find()) {
+			if (m.find()) {
 
 				positionstartarray[x] = m.start(); // <counter> -- //bowler1cntr
 				System.out.println("positionstartarray -" + positionstartarray[x]);
@@ -691,7 +716,7 @@ public class Bowlingprogrambowlers_Bprgb {
 			Matcher mclose = pclose.matcher(cntr_read_read);
 			System.out.println("cntr_read_read - " + cntr_read_read);
 		
-			while (mclose.find()) {
+			if (mclose.find()) {
 
 				positionendarray[y] = mclose.end()+1; // <counter> -- //bowler1cntr
 				System.out.println("positionendarray -" + positionendarray[y]);
@@ -713,7 +738,7 @@ public class Bowlingprogrambowlers_Bprgb {
 			k=0;
 			k=matchesplayed; //number of overs bowled
 			//read the <ball> and <rorwoutcomeresult> result data into an array
-			ballandrunscounterpropertystring=cntr_read_read.substring(positionendarray[k],positionstartarray[k+1]-1);
+			ballandrunscounterpropertystring=cntr_read_read.substring(positionendarray[k],cntr_read_read.length());
 
 			int xcntr;
 			xcntr=0;
@@ -722,7 +747,7 @@ public class Bowlingprogrambowlers_Bprgb {
 			int positionstartarrayballsandruns[] = {0,0,0,0,0,0};//read the runs scored or wickets taken
 
 				String regexballsandruns="";
-				xcntr=xcntr+1;//balls
+				//xcntr=xcntr+1;//balls
 				regexballsandruns = "<rorwoutcomeresult>";
 			    try {
 	
@@ -730,7 +755,7 @@ public class Bowlingprogrambowlers_Bprgb {
 				Matcher mballsandruns = pballsandruns.matcher(ballandrunscounterpropertystring);
 				System.out.println("ballandrunscounterpropertystring - " + ballandrunscounterpropertystring);
 				
-				while (mballsandruns.find() && xcntr<6) {
+				if (mballsandruns.find()) {
 	
 					positionstartarrayballsandruns[xcntr] = mballsandruns.end()+1; // <counter> -- //bowler1cntr
 					System.out.println("positionstartarrayballsandruns -" + positionstartarrayballsandruns[xcntr]);
@@ -750,7 +775,7 @@ public class Bowlingprogrambowlers_Bprgb {
 				int ycntr;
 				ycntr=0;
 				String regexballsandrunsend="";
-				ycntr=ycntr+1;//balls
+				//ycntr=ycntr+1;//balls
 				regexballsandrunsend = "</rorwoutcomeresult>";
 				
 			    try {
@@ -759,7 +784,7 @@ public class Bowlingprogrambowlers_Bprgb {
 					Matcher mballsandrunsend = pballsandrunsend.matcher(ballandrunscounterpropertystring);
 					System.out.println("ballandrunscounterendpropertystring - " + ballandrunscounterpropertystring);
 					
-					while (mballsandrunsend.find() && ycntr<6) {
+					if (mballsandrunsend.find()) {
 		
 						positionendarrayarrayballsandruns[ycntr] = mballsandrunsend.start()-1; // <counter> -- //bowler1cntr
 						System.out.println("positionendarrayarrayballsandruns -" + positionendarrayarrayballsandruns[ycntr]);
@@ -781,14 +806,14 @@ public class Bowlingprogrambowlers_Bprgb {
 			String runsorwicketandrunscounterproperty;
 			runsorwicketandrunscounterproperty ="";			
 
-			while (zcntr<6) {
+			while (zcntr<1) {
 
 				runsorwicketandrunscounterproperty=ballandrunscounterpropertystring.substring(positionstartarrayballsandruns[zcntr],positionendarrayarrayballsandruns[zcntr]-1);
 				
 				if (cntr_read_readflag==1) {
-					scoreint_cntr_read_read[zcntr]= Integer.parseInt(runsorwicketandrunscounterproperty);						
+					scoreint_cntr_read_read= Integer.parseInt(runsorwicketandrunscounterproperty);						
 				}else {
-					scoreint_cntr_read_read[zcntr]=0;
+					scoreint_cntr_read_read=0;
 				}
 				zcntr=zcntr+1;
 			}
@@ -803,7 +828,392 @@ public class Bowlingprogrambowlers_Bprgb {
 		
 	}
 
+	public int readcounterfromfile(String patternmatch, String cntrfilesourcenoorlightplayBallMatchfilepath) {
+		
+		/**********
+		File cntrfilesourcenoorlightplayBallMatchfile= new File(cntrfilesourcenoorlightplayBallMatchfilepath);
+
+		String propertyfilefilepath;
+		propertyfilefilepath="";
+		try {
+			propertyfilefilepath=cntrfilesourcenoorlightplayBallMatchfile.getCanonicalPath();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		File cntr_f = new File(propertyfilefilepath);
+		
+		File cntrNew_f =  new File(propertyfilefilepath);
 	
+		int int_cntr_read_read;
+		int_cntr_read_read=0;
+		
+		int cntr_read_readflag;
+		cntr_read_readflag=0;
+	
+		int int_cntr_read_write_flag;
+		int_cntr_read_write_flag=0;
+				
+		
+	if (cntrNew_f.exists()) {
+		
+	try {
+			StringBuilder cntrcontentBuilder = new StringBuilder();
+			BufferedReader br = new BufferedReader(new FileReader(cntrfilesourcenoorlightplayBallMatchfile));
+			try {
+
+				String scntrCurrentLine = null;
+				while ((scntrCurrentLine = br.readLine()) != null) {
+					cntrcontentBuilder.append(scntrCurrentLine);
+					cntr_read_readflag=1;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			br.close();
+
+			String cntr_read_read = null;
+			cntr_read_read = cntrcontentBuilder.toString();
+			System.out.println("cntr_read_read -" + cntr_read_read);			
+	****/
+		String counter;
+		counter="";
+		counter=patternmatch;
+		
+		String str; 
+		str="";
+    	
+		try { 
+			
+			 //File file = new File("D:\\Kirkaet\\MatchStatsandmatchstatistics.txt");  
+
+			 Reader in = new FileReader(Match.Matchstatistics);
+			 //BufferedReader br = new BufferedReader(in);
+			 //BufferredReader br = new BufferredReader(fr);
+
+	    try {
+
+	    	
+            int data = in.read();  
+
+            while (data != -1) {  
+                str=str+(char) data;
+                data = in.read();  
+            }
+            
+            System.out.print(str);  
+            in.close();  
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (in != null)
+					in.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+
+			String cntr_read_read;
+			cntr_read_read = str;
+			int cntr_read_readflag;
+			cntr_read_readflag=0;
+			int int_cntr_read_read;
+			int_cntr_read_read=0;
+			
+			if (str=="") {
+				cntr_read_readflag=0;
+			} else {
+				cntr_read_readflag=1;
+			}
+			
+			String regex = "";
+			regex = "<"+ counter +">";
+			int positionstartarray;
+			positionstartarray=0;
+			int positionendarray;
+			positionendarray=0;
+			int x;
+			int y;
+			x=0;
+			y=0;
+
+			try {
+				Pattern p = Pattern.compile(regex);
+				Matcher m = p.matcher(cntr_read_read);
+
+				System.out.println("cntr_read_read - " + cntr_read_read);
+				
+				if (m.find()) {
+	
+					positionstartarray = m.end()+1; // <counter> -- <Match>
+					System.out.println("positionstartarray -" + positionstartarray);
+	
+					System.out.println("positionstartarray - " + positionstartarray);
+			    	
+					x = x + 1;
+	
+				}
+			} catch (PatternSyntaxException pse) {
+				pse.getMessage();
+			}
+			
+			
+			String regexxmlend = "";
+			regexxmlend = "</"+ counter +">";
+
+			try {
+				Pattern pclose = Pattern.compile(regexxmlend);
+				Matcher mclose = pclose.matcher(cntr_read_read);
+				System.out.println("cntr_read_read - " + cntr_read_read);
+			
+				if (mclose.find()) { //while (mclose.find()) { //check if this is not working because of file regexxmlend till end of cntr_read_read file
+	
+					positionendarray = mclose.start(); // <counter> -- //</Match>
+					System.out.println("positionendarray -" + positionendarray);
+	
+					y = y + 1;
+	
+				}
+			} catch (PatternSyntaxException pse) {
+				pse.getMessage();
+			}
+			
+			String counterproperty;
+			counterproperty="";
+			
+			counterproperty=cntr_read_read.substring(positionstartarray,positionendarray-1);
+			System.out.println("counterproperty - "+patternmatch + "- "+counterproperty);
+			
+			if (counterproperty.isEmpty()) {
+				int_cntr_read_read=-1;
+			}else {
+				int_cntr_read_read=Integer.parseInt(counterproperty);
+			}
+			
+			//int_cntr_read_read=int_cntr_read_read-1; //decrement counter by 1 till its greater than 0
+			System.out.println("counter read - "+patternmatch + " property - "+int_cntr_read_read);
+			
+		
+		return int_cntr_read_read;
+		
+}	
+	
+	
+	//write counter to file and return success - true or false -
+	public boolean writecountertofile(String counter, String propertyfilepath, int inc) {
+	
+	File propertyfile= new File(propertyfilepath);
+	
+	//propertiesfile
+	//Match Statistics file	"D:\\kirkaet\\MatchStatsandmatchstatistics.txt"
+		/*
+		 * String propertyfilefilepath; propertyfilefilepath=""; try {
+		 * propertyfilefilepath=propertyfile.getCanonicalPath(); } catch (IOException e)
+		 * { e.printStackTrace(); }
+		 */
+		
+	File counterfilecntr = propertyfile;	
+	
+	File cntr_f = counterfilecntr;
+	
+	File cntrNew_f = counterfilecntr;
+	File writecntr_f = new File(propertyfilepath);
+	
+	File writecntrNew_f =  new File(propertyfilepath);
+
+	
+	File writecounterfilecntrfile=new File (propertyfilepath);
+
+	int cntr_read_readflag;
+	cntr_read_readflag=0;
+
+	int incordec;
+	incordec=1; //1 means increment, -1 means decrement
+	incordec=inc;
+	
+	int int_cntr_read_write_flag;
+	int_cntr_read_write_flag=0;
+	
+	if (cntr_f.exists()) {
+		
+		try {
+			StringBuilder cntrcontentBuilder = new StringBuilder();
+			BufferedReader br = new BufferedReader(new FileReader(counterfilecntr));
+			try {
+
+				String scntrCurrentLine = null;
+				while ((scntrCurrentLine = br.readLine()) != null) {
+					cntrcontentBuilder.append(scntrCurrentLine);
+					cntr_read_readflag=1;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			br.close();
+
+			String cntr_read_read ="";
+			int int_cntr_read_read =0;
+			cntr_read_read = cntrcontentBuilder.toString();
+			System.out.println("cntr_read_read -" + cntr_read_read);			
+			
+			String regex = "";
+			regex = "<"+ counter +">";
+			int x;
+			int y;
+			x=0;
+			y=0;
+			
+			int positionstartarray = 0;
+			int positionendarray = 0;
+
+			try {
+				
+				Pattern p = Pattern.compile(regex);
+				Matcher m = p.matcher(cntr_read_read);
+				System.out.println("cntr_read_read - " + cntr_read_read);
+				if (m.find()) {
+	
+					positionstartarray = m.end()+1; // <counter> -- //bowler1cntr
+					System.out.println("read function positionstartarray -" + positionstartarray);
+	
+					System.out.println("read function positionstartarray - " + positionstartarray);
+			    	
+					x = x + 1;
+	
+				}
+			
+			} catch (PatternSyntaxException pse) {
+				pse.getMessage();
+			}
+
+			String regexxmlend = "";
+			regexxmlend = "</"+ counter +">";
+			try {
+				Pattern pclose = Pattern.compile(regexxmlend);
+				Matcher mclose = pclose.matcher(cntr_read_read);
+				System.out.println("cntr_read_read - " + cntr_read_read);
+			
+				if (mclose.find()) {
+	
+					positionstartarray = mclose.start()-1; // <counter> -- //Match
+					System.out.println("write function positionendarray -" + positionendarray);
+	
+					System.out.println("write function positionendarray - " + positionendarray);
+			    	
+					y = y + 1;
+	
+				}
+			
+			} catch (PatternSyntaxException pse) {
+				pse.getMessage();
+			}
+
+			String counterproperty;
+			counterproperty="";
+			
+			counterproperty=cntr_read_read.substring(positionstartarray,positionendarray);
+			
+			if (cntr_read_readflag==1) {
+				int_cntr_read_read= Integer.parseInt(counterproperty);						
+			}else {
+				int_cntr_read_read =0;
+			}
+			int old_int_cntr_read_read;
+			old_int_cntr_read_read=0;
+			
+			if (incordec==1) {
+				old_int_cntr_read_read=int_cntr_read_read;
+				int_cntr_read_read=int_cntr_read_read+1; //decrement counter by 1 till its greater than 0
+			} else if (incordec==-1) {
+				old_int_cntr_read_read=int_cntr_read_read;
+				int_cntr_read_read=int_cntr_read_read-1; //decrement counter by 1 till its greater than 0
+			} 
+			String new_cntr_read_read;
+			new_cntr_read_read="";
+			String regexxmlcounterstr;
+			regexxmlcounterstr="";
+			regexxmlcounterstr="<"+ counter +">"+old_int_cntr_read_read+"</"+ counter +">";
+			
+			String replacement;
+			replacement="";
+			replacement="<"+ counter +">"+int_cntr_read_read+"</"+ counter +">";
+			
+			new_cntr_read_read=cntr_read_read.replaceFirst(regexxmlcounterstr, replacement);
+			
+			System.out.println("replace string is new_cntr_read_read -  "+new_cntr_read_read);
+			System.out.println("write to file -  "+counterfilecntr);
+			
+			
+			if (cntrNew_f.createNewFile()) {
+
+				//FileWriter cntrfw = new FileWriter(counterfilecntrfile,true);
+			  	//BufferedWriter cntrbw = new BufferedWriter(cntrfw);
+
+				//PrintWriter outcntrtestfile2 = new PrintWriter(cntrbw);
+				//outcntrtestfile2.print(new_cntr_read_read);
+				writeFileUsingStream(new_cntr_read_read,propertyfilepath);
+				
+				int_cntr_read_write_flag=1;
+				//outcntrtestfile2.close();
+			}
+		
+		
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+	
+		if (int_cntr_read_write_flag==1) {
+			return true;
+		} else {
+			return false;
+		}
+	
+	}
+	
+	
+	// to write sno, mobilenumber, recrdstartarr, recrdendarray to String and then
+	// to Printwriter out file
+	public void writeFileUsingStream(String recrddatainput, String propertypath) throws IOException {
+		InputStream is = null;
+		OutputStream os = null;
+		try {
+			// is = new FileInputStream(source);
+			StringBuffer strbuffer = new StringBuffer(recrddatainput);
+			// os = new FileOutputStream(dest2);
+			File inputfilef = new File(propertypath);
+			//FileWriter fw = new FileWriter(dest2);
+			FileWriter fw = new FileWriter(inputfilef);			
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter out = new PrintWriter(bw);
+
+			byte[] buffer = new byte[1024];
+			int length;
+			// while ((length = strbuffer.toString().length()) > 0) {
+			if ((length = strbuffer.toString().length()) > 0) {
+				out.append(strbuffer.toString());
+
+			}
+			out.close();
+			bw.close();
+			fw.close();
+		} finally {
+			// is.close();
+			// out.close();
+			System.out.println("the file is closed in previous block");
+		}
+	}
+
 	
 	
 }
