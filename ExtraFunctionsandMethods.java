@@ -30,7 +30,7 @@ public class ExtraFunctionsandMethods {
 
 	
 	/*******
-	//Match Statistic file = "c:\\kirkaet\\MatchStatsmatchstatistics.txt";
+	//Match Statistic file = "C:\\kirkaet\\MatchStatsmatchstatistics.txt";
 	
 		//read counter
 	

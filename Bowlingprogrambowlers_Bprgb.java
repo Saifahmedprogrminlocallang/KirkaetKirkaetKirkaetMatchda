@@ -19,8 +19,9 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.Random;
 import java.util.Scanner;
+import java.lang.Math.round;
 
-public class Bowlingprogrambowlers_Bprgb {
+class Bowlingprogrambowlers_Bprgb {
 	
 	//PlayGame playgame = new PlayGame();
 	
@@ -177,7 +178,14 @@ public class Bowlingprogrambowlers_Bprgb {
 					equationmatchscorerunsscored=equationmatchscorerunsscored-6;
 				printScore(option,runsscored,wickets,batsmanflag);
 				}
-				else if(scoreandwicketsforover[jcntr]==-1) {
+				else if(scoreandwicketsforover[jcntr]==7) {
+					runsscored=runsscored+6;
+					Match.Currentscore=Match.Currentscore+7;
+					batsmanflag=1;
+					equationmatchscorerunsscored=equationmatchscorerunsscored-6;
+				printScore(option,runsscored,wickets,batsmanflag);
+				}
+				else if(scoreandwicketsforover[jcntr]==8) {
 					wickets=wickets+1;
 					Match.Currentwickets=Match.Currentwickets+1;
 					batsmanflag=2;
@@ -253,9 +261,18 @@ public class Bowlingprogrambowlers_Bprgb {
 		int bowlingcntr;
 		bowlingcntr=1;
 		
-		double randombowlingoutcome;
+/**		double randombowlingoutcome;
 		int seed;
 		seed=8;
+**/
+
+	long seedrandom;
+	double randomgenerated;
+
+	GenerateRandomNumber(){
+		seedrandom = 100; //make it 3600 for 4 bowlers 900 balls each to maintain random number like sequence
+		randomgenerated=0;
+	}
 
 		int countersofbowler1[]={5,30,25,10,15,1,9,5};
 		int countersofbowler2[]={10,40,20,5,10,1,4,10};
@@ -335,10 +352,26 @@ public class Bowlingprogrambowlers_Bprgb {
 		int batsmanflag;
 		batsmanflag=1;
 
+		Random generator = new Random();
+//to generate and create the random number
+
+	public long generateRandomNumber() { 
+	
+		long randomnumbergen;
+		randomnumbergen=0;
+
+		randomgenerated = generator.nextDouble();
+		System.out.println("randomgenerated - "+randomgenerated);
+		randomnumbergen=Math.round(randomgenerated*10);
+		
+		System.out.println("randomgenerated - "+randomnumbergen);
+		return randomnumbergen;
+	}
+
 		while (bowlercntr<=6) { //900 number of balls to be bowled by every bowler
 
 			if (matchesplayed==0) {
-				bowlingcntr = genRandomNumber.generateRandomNumber();//TO GENERATE RANDOM ORDER OF SCORE
+				bowlingcntr = Math.round((genRandomNumber.generateRandomNumber()) *9);//TO GENERATE RANDOM ORDER OF SCORE
 			}
 			if ((bowlercntr>=6) && ((bowlercntr%6)==0)){//increment overs by 1
 

@@ -23,7 +23,7 @@ public class PlayGame {
 			Matchscore=40; // read from properties file 
 			Matchwickets=3;
 			ballsbowled=0;
-			Matchstatistics="C:\\Kirkaet\\MatchStatsandmatchstatistics.xml";
+			Matchstatistics="D:\\useful observations projects\\KirkaetAccountMatchROda\\MatchStatsandmatchstatistics.xml";
 			WinnerFlag=5;//match in progress
 			System.out.println("Match sequence numbers data for bowlers generated for 2 matches only");
 			//System.out.println("Matchstatistics Match Matchesplayed- "+matchesplayed);

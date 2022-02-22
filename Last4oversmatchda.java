@@ -35,8 +35,9 @@ public class Last4oversmatchda {
 		//Math.Random
 /*		double testrandom = Math.random()*100;
 		System.out.println("testrandom - "+testrandom);
-*/
+
 		Last4oversmatchda Last4overmatchdaMatch = new Last4oversmatchda();
+*/
 		Bowlingprogrambowlers_Bprgb bowlingprogrammatchsequence = new Bowlingprogrambowlers_Bprgb(); 
 
 		//Bowlingprogrambowlers_Bprgb bowlingbowler = new Bowlingprogrambowlers_Bprgb();
@@ -309,7 +310,7 @@ public class Last4oversmatchda {
     	
 		try { 
 			
-			 //File file = new File("D:\\Kirkaet\\MatchStatsandmatchstatistics.txt");  
+			 //File file = new File("D:\\useful observations projects\\KirkaetAccountMatchROda\\MatchStatsandmatchstatistics.txt");  
 
 			 Reader in = new FileReader(filename);
 			 BufferedReader br = new BufferedReader(in);
